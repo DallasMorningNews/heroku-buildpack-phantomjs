@@ -9,9 +9,9 @@ CACHE_DIR=$2
 VERSION="2.0.0"
 
 # Buildpack URL
-ARCHIVE_NAME=phantomjs-${VERSION}-linux-x86_64
-FILE_NAME=${ARCHIVE_NAME}.tar.bz2
-BUILDPACK_PHANTOMJS_PACKAGE=https://bitbucket.org/ariya/phantomjs/downloads/${FILE_NAME}
+ARCHIVE_NAME=phantomjs-${VERSION}-ubuntu_x86_64
+FILE_NAME=${ARCHIVE_NAME}.zip
+BUILDPACK_PHANTOMJS_PACKAGE=https://github.com/eugene1g/phantomjs/releases/download/2.0.0-bin/${FILE_NAME}
 
 mkdir -p $CACHE_DIR
 if ! [ -e $CACHE_DIR/$FILE_NAME ]; then
@@ -22,8 +22,11 @@ fi
 echo "-----> Extracting PhantomJS ${VERSION} binaries to ${BUILD_DIR}/vendor/phantomjs"
 mkdir -p $CACHE_DIR/$ARCHIVE_NAME
 mkdir -p $BUILD_DIR/vendor
-tar jxf $CACHE_DIR/$FILE_NAME -C $CACHE_DIR
-mv $CACHE_DIR/$ARCHIVE_NAME $BUILD_DIR/vendor/phantomjs
+mkdir -p $BUILD_DIR/vendor/phantomjs
+mkdir -p $BUILD_DIR/vendor/phantomjs/bin
+
+unzip $CACHE_DIR/$FILE_NAME -d $CACHE_DIR/$ARCHIVE_NAME
+mv $CACHE_DIR/$ARCHIVE_NAME/phantomjs $BUILD_DIR/vendor/phantomjs/bin
 
 echo "-----> exporting PATH and LIBRARY_PATH"
 PROFILE_PATH="$BUILD_DIR/.profile.d/phantomjs.sh"
